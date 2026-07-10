@@ -377,12 +377,52 @@ X<!DOCTYPE html>
     });
   }
 
-  document.getElementById('submitBtn').addEventListener('click', async () => {
-    const form = document.getElementById('intakeForm');
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
+ document.getElementById('submitBtn').addEventListener('click', async () => {
+  const form = document.getElementById('intakeForm');
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  const statusEl = document.getElementById('statusMsg');
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+  statusEl.textContent = photoFiles.length
+    ? 'Uploading photos, please wait...'
+    : 'Submitting...';
+
+  const data = Object.fromEntries(new FormData(form).entries());
+
+  try {
+    const photos = await Promise.all(
+      photoFiles.map(async (file) => ({
+        filename: file.name || 'photo.jpg',
+        mimeType: file.type || 'image/jpeg',
+        base64: await fileToBase64(file),
+      }))
+    );
+
+    const payload = { ...data, photos };
+
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json();
+    console.log('Script response:', result);
+
+    document.getElementById('intakeForm').classList.add('hide');
+    document.querySelector('.submit-bar').style.display = 'none';
+    document.getElementById('successScreen').classList.add('show');
+  } catch (err) {
+    console.error('Submit error:', err);
+    statusEl.textContent = 'Something went wrong - check your connection and try again.';
+    btn.disabled = false;
+    btn.textContent = 'Submit to Office';
+  }
+});
 
     const statusEl = document.getElementById('statusMsg');
     const btn = document.getElementById('submitBtn');
