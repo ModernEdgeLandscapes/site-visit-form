@@ -280,12 +280,12 @@
     <textarea name="scope" required></textarea>
   </div>
   <div class="field">
-    <label>Main Items</label>
-    <textarea name="mainItems"></textarea>
+    <label>Non-Negotiables</label>
+    <textarea name="nonNegotiables" placeholder="Items or requirements the client will not compromise on"></textarea>
   </div>
   <div class="field">
-    <label>Items They're Happy to Swap</label>
-    <textarea name="swapItems"></textarea>
+    <label>Negotiables</label>
+    <textarea name="negotiables" placeholder="Items the client is open to changing or swapping"></textarea>
   </div>
 
   <p class="section-title">Timeline &amp; Budget</p>
@@ -307,8 +307,8 @@
   <p class="section-title">Site Photos</p>
   <label class="photo-zone" id="photoZone">
     <span class="photo-icon">📷</span>
-    Tap to take or upload photos
-    <input type="file" id="photoInput" accept="image/*" multiple capture="environment">
+    Tap to take a photo or choose from camera roll
+    <input type="file" id="photoInput" accept="image/*" multiple>
   </label>
   <div class="hint" id="photoCount"></div>
   <div id="thumbs"></div>
